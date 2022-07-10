@@ -1,49 +1,43 @@
-import { Component } from "react"
-import { createPortal } from "react-dom"
-import PropTypes from 'prop-types'
+import { useEffect } from 'react';
+import { createPortal } from 'react-dom';
+import PropTypes from 'prop-types';
 
-const modalRoot = document.getElementById('modal-root')
+const modalRoot = document.getElementById('modal-root');
 
-class Modal extends Component {
+const Modal = ({ imageUrl, onClose }) => {
+    useEffect(() => {
+        window.addEventListener('keydown', handleCloseOnEsc);
+        return () => {
+            window.removeEventListener('keydown', handleCloseOnEsc);
+        };
+    }, []);
 
-    handleCloseOnEsc = (event) => {
+    const handleCloseOnEsc = event => {
         if (event.code !== 'Escape') {
-            return
+            return;
         }
-        this.props.onClose()
-    }
-    handleCloseOnClick = (event) => {
+        onClose();
+    };
+    const handleCloseOnClick = event => {
         if (event.target !== event.currentTarget) {
-            return
+            return;
         }
-        this.props.onClose()
-    } 
-    
-    componentDidMount() {
-        window.addEventListener('keydown', this.handleCloseOnEsc)
-    }
-    componentWillUnmount() {
-        window.removeEventListener('keydown', this.handleCloseOnEsc)
-    }
+        onClose();
+    };
 
-    render() {
-        const { handleCloseOnClick } = this
-        const { imageUrl } = this.props
-        
-        return createPortal(
-            <div onClick={handleCloseOnClick} className="Overlay">
-                <div className="Modal">
-                    <img src={imageUrl} alt="" />
-                </div>
-            </div>,
-            modalRoot
-        )
-    }
-}
+    return createPortal(
+        <div onClick={handleCloseOnClick} className="Overlay">
+            <div className="Modal">
+                <img src={imageUrl} alt="" />
+            </div>
+        </div>,
+        modalRoot,
+    );
+};
 
 Modal.propTypes = {
     imageUrl: PropTypes.string.isRequired,
-    onClose: PropTypes.func.isRequired
-}
+    onClose: PropTypes.func.isRequired,
+};
 
-export default Modal
+export default Modal;

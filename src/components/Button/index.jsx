@@ -1,10 +1,13 @@
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 
-const Button = ({ onClick }) => 
-     <button onClick={onClick} className="Button" type="button">Load more</button>
+const Button = ({ onClick }) => (
+    <button onClick={onClick} className="Button" type="button">
+        Load more
+    </button>
+);
 
 Button.propTypes = {
-     onClick: PropTypes.func.isRequired
-}
+    onClick: PropTypes.func.isRequired,
+};
 
-export default Button
+export default Button;

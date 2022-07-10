@@ -1,70 +1,84 @@
-import { Component } from "react";
-import ImageGallery from "./ImageGallery";
-import Loader from "./Loader";
-import Searchbar from "./Searchbar";
-import ErrorHandler from "./ErrorHandler";
-import Button from "./Button";
-import {fetchImages} from '../services/pixabayAPI'
+import { useState, useEffect, useLayoutEffect } from 'react';
+import ImageGallery from './ImageGallery';
+import Loader from './Loader';
+import Searchbar from './Searchbar';
+import ErrorHandler from './ErrorHandler';
+import Button from './Button';
+import { fetchImages } from '../services/pixabayAPI';
 
-export class App extends Component {
-  state = {
-    query: '',
-    page: 1,
-    status: 'idle',
-    images: [],
-    totalImages: 0,
-    errorMessage: ''
-  }
+const STATUS = {
+    IDLE: 'idle',
+    PENDING: 'pending',
+    FULFILLED: 'fulfilled',
+    REJECTED: 'rejected',
+};
+const ERROR_MESSAGE = 'Nothing found to match your query';
 
-  async componentDidUpdate(_, prevState) {
-    const { query, page, images } = this.state
-    
-    if (prevState.query === query && prevState.page === page) {
-      return
-    }
-    
-    this.setState({ status: 'pending' })
+export const App = () => {
+    const [query, setQuery] = useState('');
+    const [page, setPage] = useState(1);
+    const [status, setStatus] = useState(STATUS.IDLE);
+    const [images, setImages] = useState([]);
+    const [totalImages, setTotalImages] = useState(0);
+    const [errorMessage, setErrorMessage] = useState('');
 
-    try {
-      const data = await fetchImages(query, page)
-
-      if (data.total === 0) {
-          throw new Error('Nothing found to match your query');
-      }
-      
-      this.setState({
-        status: 'fulfilled',
-        totalImages: data.totalHits,
-        images: query !== prevState.query ? data.hits : [...images, ...data.hits],
-        })
-    } catch (error) {
-      this.setState({status: 'rejected', errorMessage: error.message})
-    }
-  }
-
-  handleSubmit = (query) => {
-    this.setState({ query, page: 1 })
-  }
-
-  onLoadMoreClick = () => {
-    this.setState(({ page }) => ({ page: page + 1 }))
-  }
-
-  render() {
-    const { status, images, totalImages, errorMessage } = this.state
-    const { handleSubmit, onLoadMoreClick } = this
     const imagesEmpty = images.length === 0;
     const allImagesShown = images.length >= totalImages;
-      return (
-      <>
-        <Searchbar onSubmit={handleSubmit} />
-        <div className="container">
-          {!imagesEmpty && <ImageGallery images={images}/>}
-          {status === 'pending' && <Loader />}
-          {!allImagesShown && <Button onClick={onLoadMoreClick} />}
-          {status === 'rejected' && <ErrorHandler message={errorMessage} />}
-        </div>
-      </>
-  )
+
+    useEffect(() => {
+        if (query === '') {
+            return;
+        }
+
+        setStatus(STATUS.PENDING);
+
+        fetchImages(query, page)
+            .then(data => {
+                if (data.total === 0) {
+                    throw new Error(ERROR_MESSAGE);
+                }
+                setImages(images => [...images, ...data.hits]);
+                setTotalImages(data.totalHits);
+                setStatus(STATUS.FULFILLED);
+            })
+            .catch(error => {
+                setTotalImages(0);
+                setErrorMessage(error.message);
+                setStatus(STATUS.REJECTED);
+            });
+    }, [query, page]);
+
+    useLayoutEffect(() => {
+        if (page < 2) {
+            return;
+        }
+        window.scrollBy({
+            top: 600,
+            behavior: 'smooth',
+        });
+    }, [page, images]);
+
+    const handleSubmit = newQuery => {
+        if (query !== newQuery) {
+            setImages([]);
+        }
+        setQuery(newQuery);
+        setPage(1);
     };
+
+    const onLoadMoreClick = () => {
+        setPage(prevPage => prevPage + 1);
+    };
+
+    return (
+        <>
+            <Searchbar onSubmit={handleSubmit} />
+            <div className="container">
+                {!imagesEmpty && <ImageGallery images={images} />}
+                {status === 'pending' && <Loader />}
+                {!allImagesShown && <Button onClick={onLoadMoreClick} />}
+                {status === 'rejected' && <ErrorHandler message={errorMessage} />}
+            </div>
+        </>
+    );
 };

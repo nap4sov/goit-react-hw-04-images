@@ -1,13 +1,9 @@
-import { Puff } from  'react-loader-spinner'
+import { Puff } from 'react-loader-spinner';
 
-const Loader = () => 
+const Loader = () => (
     <div className="loader">
-        <Puff
-            height="100"
-            width="100"
-            color='grey'
-            ariaLabel='loading'
-        />
+        <Puff height="100" width="100" color="grey" ariaLabel="loading" />
     </div>
+);
 
-export default Loader
+export default Loader;
