@@ -6,18 +6,19 @@ const modalRoot = document.getElementById('modal-root');
 
 const Modal = ({ imageUrl, onClose }) => {
     useEffect(() => {
+        const handleCloseOnEsc = event => {
+            if (event.code !== 'Escape') {
+                return;
+            }
+            onClose();
+        };
+
         window.addEventListener('keydown', handleCloseOnEsc);
         return () => {
             window.removeEventListener('keydown', handleCloseOnEsc);
         };
-    }, []);
+    }, [onClose]);
 
-    const handleCloseOnEsc = event => {
-        if (event.code !== 'Escape') {
-            return;
-        }
-        onClose();
-    };
     const handleCloseOnClick = event => {
         if (event.target !== event.currentTarget) {
             return;
