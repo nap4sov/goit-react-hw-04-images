@@ -1,8 +1,9 @@
 import { Puff } from 'react-loader-spinner';
+import styles from './styles.module.css';
 
 const Loader = () => (
-    <div className="loader">
-        <Puff height="100" width="100" color="grey" ariaLabel="loading" />
+    <div className={styles.loader}>
+        <Puff height="50" width="50" color="#3f51b5" ariaLabel="loading" />
     </div>
 );
 

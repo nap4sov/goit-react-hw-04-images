@@ -1,0 +1,14 @@
+.container {
+    max-width: 500px;
+    text-align: center;
+    margin-right: auto;
+    margin-left: auto;
+    background-color: rgba(255, 0, 0, 0.808);
+    border-radius: 4px;
+}
+.message {
+    font-weight: 700;
+    color: floralwhite;
+    font-size: 24px;
+    padding: 20px;
+}

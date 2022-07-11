@@ -1,9 +1,10 @@
+import styles from './styles.module.css';
 import PropTypes from 'prop-types';
 
 const ImageGalleryItem = ({ smallImg, id, onClick }) => {
     return (
-        <li className="ImageGalleryItem" id={id} onClick={onClick}>
-            <img src={smallImg} alt="" className="ImageGalleryItem-image" />
+        <li className={styles.item} id={id} onClick={onClick}>
+            <img src={smallImg} alt="" className={styles.image} />
         </li>
     );
 };

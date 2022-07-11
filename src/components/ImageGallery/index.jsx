@@ -1,6 +1,7 @@
 import ImageGalleryItem from 'components/ImageGalleryItem';
 import Modal from 'components/Modal';
 import { useState } from 'react';
+import styles from './styles.module.css';
 import PropTypes from 'prop-types';
 
 const ImageGallery = ({ images }) => {
@@ -18,7 +19,7 @@ const ImageGallery = ({ images }) => {
         );
     };
     return (
-        <ul className="ImageGallery">
+        <ul className={styles.gallery}>
             {images.map(({ id, webformatURL }) => (
                 <ImageGalleryItem
                     key={id}

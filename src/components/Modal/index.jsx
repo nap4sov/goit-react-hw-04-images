@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { createPortal } from 'react-dom';
+import styles from './styles.module.css';
 import PropTypes from 'prop-types';
 
 const modalRoot = document.getElementById('modal-root');
@@ -27,8 +28,8 @@ const Modal = ({ imageUrl, onClose }) => {
     };
 
     return createPortal(
-        <div onClick={handleCloseOnClick} className="Overlay">
-            <div className="Modal">
+        <div onClick={handleCloseOnClick} className={styles.overlay}>
+            <div className={styles.modal}>
                 <img src={imageUrl} alt="" />
             </div>
         </div>,

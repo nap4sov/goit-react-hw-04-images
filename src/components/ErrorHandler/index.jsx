@@ -1,8 +1,9 @@
+import styles from './styles.module.css';
 import PropTypes from 'prop-types';
 
 const ErrorHandler = ({ message }) => (
-    <div className="errorContainer">
-        <p className="errorMessage">{message}</p>
+    <div className={styles.container}>
+        <p className={styles.message}>{message}</p>
     </div>
 );
 

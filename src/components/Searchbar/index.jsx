@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import styles from './styles.module.css';
 import PropTypes from 'prop-types';
 
 const Searchbar = ({ onSubmit }) => {
@@ -14,16 +15,16 @@ const Searchbar = ({ onSubmit }) => {
     };
 
     return (
-        <header className="Searchbar">
-            <form className="SearchForm" onSubmit={handleSubmit}>
-                <button type="submit" className="SearchForm-button">
-                    <span className="SearchForm-button-label">Search</span>
+        <header className={styles.searchbar}>
+            <form className={styles.form} onSubmit={handleSubmit}>
+                <button type="submit" className={styles.button}>
+                    <span className={styles.label}>Search</span>
                 </button>
 
                 <input
                     value={value}
                     onChange={handleTextInput}
-                    className="SearchForm-input"
+                    className={styles.input}
                     type="text"
                     autoComplete="off"
                     autoFocus

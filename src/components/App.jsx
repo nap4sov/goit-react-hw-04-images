@@ -52,8 +52,11 @@ export const App = () => {
         if (page < 2) {
             return;
         }
+
+        const scrollHeight = 366 * 1.5;
+
         window.scrollBy({
-            top: 600,
+            top: scrollHeight,
             behavior: 'smooth',
         });
     }, [page, images]);
@@ -75,9 +78,12 @@ export const App = () => {
             <Searchbar onSubmit={handleSubmit} />
             <div className="container">
                 {!imagesEmpty && <ImageGallery images={images} />}
-                {status === 'pending' && <Loader />}
-                {!allImagesShown && <Button onClick={onLoadMoreClick} />}
-                {status === 'rejected' && <ErrorHandler message={errorMessage} />}
+                {status === STATUS.PENDING ? (
+                    <Loader />
+                ) : (
+                    !allImagesShown && <Button onClick={onLoadMoreClick} />
+                )}
+                {status === STATUS.REJECTED && <ErrorHandler message={errorMessage} />}
             </div>
         </>
     );
